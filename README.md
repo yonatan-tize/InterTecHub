@@ -30,10 +30,10 @@ InterTecHub is a NestJS-based application that provides various endpoints to ret
 ## Endpoints
 User Endpoints
 
-    GET /user/name    Returns the user's name.
+    GET /name    Returns the user's name.
 
-    GET /user/hobby   Returns the user's hobbies.
+    GET /hobby   Returns the user's hobbies.
 
-    GET /user/dream   Returns the user's dream.
+    GET /dream   Returns the user's dream.
 
 
