@@ -5,6 +5,19 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('name')
+  getName(){
+    return this.userService.getName()
+  }
 
+  @Get('hobby')
+  getHobby(){
+    return this.userService.getHobby()
+  }
+
+  @Get('dream')
+  getDream(){
+    return this.userService.getDream()
+  }
 
 }

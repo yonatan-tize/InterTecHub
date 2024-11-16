@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class UserService {
     getName(){
-        return "My name is Yonatan Tizazu"
+        return "My name is Yonatan Tizazu."
       };
     
       getHobby(){
