@@ -27,7 +27,7 @@ export class BooksCollectionService {
       where: {id}
     });
     if (!book){
-      throw new HttpException("No book found with the given id", 400);
+      throw new HttpException("No book found with the given id", 404);
     };
     return book;
   }
@@ -48,6 +48,14 @@ export class BooksCollectionService {
     }
 
     return await this.bookCollectionsRepository.findOne({ where: { id } })
+  }
+
+  async getRandomBooks(limit: number) {
+    return await this.bookCollectionsRepository
+      .createQueryBuilder('book')
+      .orderBy('RANDOM()') 
+      .limit(limit)
+      .getMany();
   }
 
   async update(id: string, updateBooksCollectionDto: UpdateBooksCollectionDto) {
