@@ -10,6 +10,7 @@ InterTecHub is a NestJS-based application that provides various endpoints to ret
     ```sh
     git clone https://github.com/yonatan-tize/InterTecHub.git
     cd intertechub
+    cd task-1
     ```
 
 2. Install the dependencies:
