@@ -1,27 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateBooksCollectionDto } from './dto/create-books-collection.dto';
 import { UpdateBooksCollectionDto } from './dto/update-books-collection.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BookCollections } from './entities/books-collection.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BooksCollectionService {
 
-  create(createBooksCollectionDto: CreateBooksCollectionDto) {
-    return 'This action adds a new booksCollection';
+  constructor(
+    @InjectRepository(BookCollections)
+    private readonly bookCollectionsRepository: Repository<BookCollections>
+  ){}
+
+  async create(createBooksCollectionDto: CreateBooksCollectionDto) {
+    const book = this.bookCollectionsRepository.create(createBooksCollectionDto)
+    return await this.bookCollectionsRepository.save(book)
   }
 
-  findAll() {
-    return `This action returns all booksCollection`;
+  async findAll() {
+    return await this.bookCollectionsRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} booksCollection`;
+  async findOne(id: string) {
+    const book = await this.bookCollectionsRepository.findOne({
+      where: {id}
+    });
+    if (!book){
+      throw new HttpException("No book found with the given id", 400);
+    };
+    return book;
   }
 
-  update(id: number, updateBooksCollectionDto: UpdateBooksCollectionDto) {
-    return `This action updates a #${id} booksCollection`;
+  async findFavorites(){
+    const favoriteBooks = await this.bookCollectionsRepository.find({
+      where: { favorite: true }
+    });
+
+    return favoriteBooks
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booksCollection`;
+  async makeFavorite(id: string, updateDto: UpdateBooksCollectionDto){
+    const updatedBook = await this.bookCollectionsRepository.update(id, updateDto)
+
+    if (updatedBook.affected == 0){
+      throw new HttpException("No book found with the given id", 404);
+    }
+
+    return await this.bookCollectionsRepository.findOne({ where: { id } })
+  }
+
+  async update(id: string, updateBooksCollectionDto: UpdateBooksCollectionDto) {
+    const result = await this.bookCollectionsRepository.update(id, updateBooksCollectionDto)
+
+    if (result.affected == 0) {
+      throw new HttpException("No book found with the given id", 404);
+    };
+
+    return await this.bookCollectionsRepository.findOne({ where: { id } })
+  }
+
+  async remove(id: string) {
+    const result = await this.bookCollectionsRepository.delete(id)
+
+    if (result.affected == 0){
+      throw new HttpException("No book found with the given id", 404);
+    }
+    return { message: 'Book successfully removed', id };
   }
 }

@@ -7,7 +7,7 @@ import { UpdateBooksCollectionDto } from './dto/update-books-collection.dto';
 export class BooksCollectionController {
   constructor(private readonly booksCollectionService: BooksCollectionService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createBooksCollectionDto: CreateBooksCollectionDto) {
     return this.booksCollectionService.create(createBooksCollectionDto);
   }
@@ -19,16 +19,21 @@ export class BooksCollectionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.booksCollectionService.findOne(+id);
+    return this.booksCollectionService.findOne(id);
+  }
+
+  @Get('favorite')
+  findFavorites(){
+    return this.booksCollectionService.findFavorites()
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBooksCollectionDto: UpdateBooksCollectionDto) {
-    return this.booksCollectionService.update(+id, updateBooksCollectionDto);
+    return this.booksCollectionService.update(id, updateBooksCollectionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.booksCollectionService.remove(+id);
+    return this.booksCollectionService.remove(id);
   }
 }

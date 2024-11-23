@@ -13,7 +13,10 @@ export class BookCollections {
     author: string
 
     @Column()
-    isbn: number
+    isbn: string
+
+    @Column({nullable: true})
+    genre: string
 
     @Column()
     publishedYear: number
