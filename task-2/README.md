@@ -5,6 +5,14 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
+
+# InterTecHub task-2
+
+
+## Description
+
+InterTecHub task-2 is a NestJS-based application that provides various endpoints to retrieve book information and a simple entry point to the application. The project is structured with a modular approach, making it easy to extend and maintain.
+
 ## Project setup
 
 1. Clone the repository:
@@ -15,6 +23,7 @@
     ```
 
 2. Install the dependencies:
+ ## to install the dependency
     ```bash
     # dependency
     $ npm install
@@ -41,8 +50,3 @@ DELETE /books/:id: Delete a book with the given ID from the collection.
 GET /books/favorite: Retrieve all books where the favorite field is set to true.
 GET /books/random: Retrieve random books from the collection (1 up-to 10 books randomly).
 PUT /books/favorite/:id: Mark the book with the given ID as favorite or remove it from favorites.
-
-
-
-
-
