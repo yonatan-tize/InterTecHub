@@ -7,9 +7,18 @@
 
 ## Project setup
 
-```bash
-$ npm install
-```
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/yonatan-tize/InterTecHub.git
+    cd intertechub
+    cd task-2
+    ```
+
+2. Install the dependencies:
+    ```bash
+    # dependency
+    $ npm install
+    ```
 
 ## Compile and run the project
 
@@ -20,22 +29,20 @@ $ npm run start
 # watch mode
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+## Endpoints
 ```
+POST /books: Create a new book and return the newly created book.
+GET /books: Retrieve all books in the collection.
+GET /books/:id: Retrieve details of a specific book by its ID.
+PUT /books/:id: Update the details of a book with the given ID.
+DELETE /books/:id: Delete a book with the given ID from the collection.
+GET /books/favorite: Retrieve all books where the favorite field is set to true.
+GET /books/random: Retrieve random books from the collection (1 up-to 10 books randomly).
+PUT /books/favorite/:id: Mark the book with the given ID as favorite or remove it from favorites.
 
-## Resources
+
+
+
 
