@@ -22,5 +22,6 @@ export class CreateBooksCollectionDto {
     publishedYear: number
 
     @IsBoolean()
+    @IsOptional()
     favorite?: boolean
 }

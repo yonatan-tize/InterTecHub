@@ -13,15 +13,19 @@ export class BooksCollectionService {
     private readonly bookCollectionsRepository: Repository<BookCollections>
   ){}
 
+  
+  // Creates a new book collection in the repository.
   async create(createBooksCollectionDto: CreateBooksCollectionDto) {
     const book = this.bookCollectionsRepository.create(createBooksCollectionDto)
     return await this.bookCollectionsRepository.save(book)
   }
 
+  // Retrieves all books from the database.
   async findAll() {
     return await this.bookCollectionsRepository.find()
   }
 
+  // Retrieves a specific book by its ID.
   async findOne(id: string) {
     const book = await this.bookCollectionsRepository.findOne({
       where: {id}
@@ -32,6 +36,7 @@ export class BooksCollectionService {
     return book;
   }
 
+  // Retrieves all favorite books from the database.
   async findFavorites(){
     const favoriteBooks = await this.bookCollectionsRepository.find({
       where: { favorite: true }
@@ -40,17 +45,24 @@ export class BooksCollectionService {
     return favoriteBooks
   }
 
-  async makeFavorite(id: string, updateDto: UpdateBooksCollectionDto){
-    const updatedBook = await this.bookCollectionsRepository.update(id, updateDto)
+  // Updates a book's favorite status 
+  async changeFavorite(id: string){
+    const book = await this.bookCollectionsRepository.findOneBy({ id });
 
-    if (updatedBook.affected == 0){
-      throw new HttpException("No book found with the given id", 404);
+    if (!book) {
+        throw new HttpException("No book found with the given id", 404);
     }
 
-    return await this.bookCollectionsRepository.findOne({ where: { id } })
+    const updatedFavoriteStatus = !book.favorite; 
+
+    await this.bookCollectionsRepository.update(id, { favorite: updatedFavoriteStatus });
+
+    return await this.bookCollectionsRepository.findOneBy({ id });
   }
 
-  async getRandomBooks(limit: number) {
+  // Retrieves a random number (from 1 to 10) of books from the database.
+  async getRandomBooks() {
+    const limit = Math.floor(Math.random() * 10) + 1;
     return await this.bookCollectionsRepository
       .createQueryBuilder('book')
       .orderBy('RANDOM()') 
@@ -58,6 +70,7 @@ export class BooksCollectionService {
       .getMany();
   }
 
+  // Updates a specific book by its ID.
   async update(id: string, updateBooksCollectionDto: UpdateBooksCollectionDto) {
     const result = await this.bookCollectionsRepository.update(id, updateBooksCollectionDto)
 
@@ -68,6 +81,7 @@ export class BooksCollectionService {
     return await this.bookCollectionsRepository.findOne({ where: { id } })
   }
 
+  // Delete a specific book by its ID.
   async remove(id: string) {
     const result = await this.bookCollectionsRepository.delete(id)
 
