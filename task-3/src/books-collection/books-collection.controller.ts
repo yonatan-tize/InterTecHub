@@ -3,9 +3,10 @@ import { BooksCollectionService } from './books-collection.service';
 import { CreateBooksCollectionDto } from './dto/create-books-collection.dto';
 import { UpdateBooksCollectionDto } from './dto/update-books-collection.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { Role } from 'src/decorator/role.decorator';
+import { AllowedRoles } from 'src/decorator/role.decorator';
 import { UserRole } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { CurrentUser } from 'src/decorator/current-user.decorator';
 
 @UseGuards(AuthGuard)
 @Controller('books')
@@ -14,15 +15,18 @@ export class BooksCollectionController {
 
   // create a new book and return the newly created book
   @Post()
-  @Role(UserRole.USER)
+  @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
-  create(@Body() createBooksCollectionDto: CreateBooksCollectionDto) {
-    return this.booksCollectionService.create(createBooksCollectionDto);
+  create(
+    @Body() createBooksCollectionDto: CreateBooksCollectionDto,
+    @CurrentUser() currentUserId: string
+  ) {
+    return this.booksCollectionService.create(createBooksCollectionDto, currentUserId);
   }
 
   // find all books
   @Get()
-  @Role(UserRole.USER, UserRole.ADMIN)
+  @AllowedRoles(UserRole.USER, UserRole.ADMIN)
   @UseGuards(RolesGuard)
   findAll() {
     return this.booksCollectionService.findAll();
@@ -30,31 +34,34 @@ export class BooksCollectionController {
 
   //get books whose favorite field is set to true
   @Get('favorite')
-  @Role(UserRole.USER)
+  @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
-  findFavorites(){
-    return this.booksCollectionService.findFavorites()
+  findFavorites(@CurrentUser() currentUserId: string){
+    return this.booksCollectionService.findFavorites(currentUserId)
   }
 
   // get books randomly
   @Get('random')
-  @Role(UserRole.USER, UserRole.ADMIN)
+  @AllowedRoles(UserRole.USER, UserRole.ADMIN)
   @UseGuards(RolesGuard)
   getRandomBooks(){
     return this.booksCollectionService.getRandomBooks()
   }
 
-  // change the book with the given id to favorite or not favorite
+  // change the book with the given id to favorite
   @Put('favorite/:id')
-  @Role(UserRole.USER)
+  @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
-  makeFavorite(@Param('id', ParseUUIDPipe) id: string){
-    return this.booksCollectionService.changeFavorite(id)
+  changeFavorite(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUserId: string
+  ){
+    return this.booksCollectionService.changeFavorite(id, currentUserId)
   }
 
   //get book by id
   @Get(':id')
-  @Role(UserRole.ADMIN, UserRole.USER)
+  @AllowedRoles(UserRole.ADMIN, UserRole.USER)
   @UseGuards(RolesGuard)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.booksCollectionService.findOne(id);
@@ -62,17 +69,24 @@ export class BooksCollectionController {
 
   // update book by id
   @Put(':id')
-  @Role(UserRole.ADMIN, UserRole.USER)
+  @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateBooksCollectionDto: UpdateBooksCollectionDto) {
-    return this.booksCollectionService.update(id, updateBooksCollectionDto);
+  update(
+    @Param('id', ParseUUIDPipe) id: string, 
+    @Body() updateBooksCollectionDto: UpdateBooksCollectionDto,
+    @CurrentUser() currentUserId: string
+  ) {
+    return this.booksCollectionService.update(id, updateBooksCollectionDto, currentUserId);
   }
 
   //delete book by id
   @Delete(':id')
-  @Role(UserRole.ADMIN, UserRole.USER)
+  @AllowedRoles(UserRole.ADMIN, UserRole.USER)
   @UseGuards(RolesGuard)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.booksCollectionService.remove(id);
+  remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUserId: string
+  ) {
+    return this.booksCollectionService.remove(id, currentUserId);
   }
 }

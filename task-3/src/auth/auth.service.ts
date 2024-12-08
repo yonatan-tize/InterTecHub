@@ -12,10 +12,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ){}
     async signUp(user: CreateUsersDto){  
-        const foundUser = await this.usersService.findOneByEmail(user.email);
-        if(foundUser){
-            throw new HttpException('Email already in use.', 400);    
-        };
+        //if email exist typeorm will return bad request since email is set unique 
         //hash password
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;

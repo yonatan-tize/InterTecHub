@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate{
         try{
             const payLoad = this.jwtService.verify(token);
             const user = await this.userService.findOneByEmail(payLoad.email);
-            request.user = user
+            request.currentUserId = user.id;
         } catch(err){
             throw new HttpException('Invalid token', 401);
         };
