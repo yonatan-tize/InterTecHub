@@ -29,7 +29,7 @@ export class BookCollections {
     @JoinColumn({name: 'userId'})
     user: User
 
-    @ManyToMany(()=> User, (user)=> user.favoriteBooks, { cascade: true, onDelete: 'CASCADE' })
+    @ManyToMany(()=> User, (user)=> user.favoriteBooks)
     @JoinTable()
     favoriteOf?: User[]
 

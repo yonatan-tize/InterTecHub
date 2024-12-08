@@ -4,6 +4,8 @@ import { SignInDto } from './dtos/sign-in.dto';
 import { UsersService } from 'src/users/users.service';
 import { CreateUsersDto } from 'src/users/dtos/create-users.dto';
 import { JwtService } from '@nestjs/jwt';
+import { AnyARecord } from 'dns';
+import { UserRole } from 'src/enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -12,14 +14,29 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ){}
     async signUp(user: CreateUsersDto){  
+        // if database is empty make the first user admin
+        // const usersCount = await this.usersService.count();
+        // let newUser;
+        // if (usersCount === 0) {
+        //     newUser = {
+        //         ...user,
+        //         role: 'admin'
+        //     }
+        // } else{
+        //     newUser = {...user}
+        // }
         //if email exist typeorm will return bad request since email is set unique 
         //hash password
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
 
-        // register new user
-        const newUser = await this.usersService.create(user);
-        return newUser;
+        // register new user if no user found the first user is admin
+        const usersCount = await this.usersService.count();
+        if (usersCount === 0){
+            return await this.usersService.create({...user, role: UserRole.ADMIN})
+        }
+
+        return await this.usersService.create(user);
     }
 
     async signIn(user: SignInDto){

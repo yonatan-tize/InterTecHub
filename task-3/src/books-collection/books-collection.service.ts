@@ -59,17 +59,28 @@ export class BooksCollectionService {
   }
 
   // make a book favorite  
-  async changeFavorite(id: string, currentUserId: string){
-    const book = await this.bookCollectionsRepository.findOneBy({ id });
+  async changeFavorite(bookId: string, currentUserId: string){
+    const book = await this.bookCollectionsRepository.findOneBy({ id: bookId });
 
     if (!book) {
         throw new HttpException("No book found with the given id", 404);
     }
 
-    // make this book to favorite
+    // get users favorite 
     const user = await this.userServices.findUserFavorite(currentUserId)
+    const isFavorite = user.favoriteBooks?.some((favBook) => favBook.id === bookId);
 
-    return await this.bookCollectionsRepository.findOneBy({ id });
+    if (isFavorite) {
+      // If it is already a favorite, remove it
+      user.favoriteBooks = user.favoriteBooks.filter((favBook) => favBook.id !== bookId);
+      await this.userServices.save(user);
+      return `Book with ID ${bookId} has been removed from favorites.`;
+    } else {
+      // If it is not a favorite, add it
+      user.favoriteBooks = [...(user.favoriteBooks || []), book];
+      await this.userServices.save(user);
+      return `Book with ID ${bookId} has been added to favorites.`;
+    }
   }
 
   // Retrieves a random number (from 1 to 10) of books from the database.
@@ -84,11 +95,11 @@ export class BooksCollectionService {
 
   // Updates a specific book by its ID if the author is the current user.
   async update(
-    id: string, 
+    bookId: string, 
     updateBooksCollectionDto: UpdateBooksCollectionDto,
     currentUserId: string
   ) {
-    const book = await this.bookCollectionsRepository.findOne({ where: { id } });
+    const book = await this.bookCollectionsRepository.findOne({ where: { id: bookId } });
 
     if (!book) {
       throw new HttpException("No book found with the given id", 404);
@@ -98,18 +109,18 @@ export class BooksCollectionService {
       throw new HttpException("You are not authorized to update this book", 403);
     }
 
-    const result = await this.bookCollectionsRepository.update(id, updateBooksCollectionDto);
+    const result = await this.bookCollectionsRepository.update({ id: bookId }, updateBooksCollectionDto);
 
     if (result.affected == 0) {
       throw new HttpException("Failed to update the book", 400);
     }
 
-    return await this.bookCollectionsRepository.findOne({ where: { id } });
+    return await this.bookCollectionsRepository.findOne({ where: { id: bookId } });
   }
 
   // Delete a specific book by its ID if authorized.
-  async remove(id: string, currentUserId: string) {
-    const book = await this.bookCollectionsRepository.findOne({ where: { id } });
+  async remove(bookId: string, currentUserId: string) {
+    const book = await this.bookCollectionsRepository.findOne({ where: { id: bookId } });
 
     if (!book) {
       throw new HttpException("No book found with the given id", 404);
@@ -119,12 +130,12 @@ export class BooksCollectionService {
       throw new HttpException("You are not authorized to delete this book", 403);
     }
 
-    const result = await this.bookCollectionsRepository.delete(id);
+    const result = await this.bookCollectionsRepository.delete({ id: bookId });
 
     if (result.affected == 0) {
       throw new HttpException("Failed to delete the book", 400);
     }
 
-    return { message: 'Book successfully removed', id };
+    return { message: 'Book successfully removed', id: bookId };
   }
 }

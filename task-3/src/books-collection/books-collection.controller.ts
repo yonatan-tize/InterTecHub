@@ -7,7 +7,9 @@ import { AllowedRoles } from 'src/decorator/role.decorator';
 import { UserRole } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('books')
 export class BooksCollectionController {
@@ -32,7 +34,7 @@ export class BooksCollectionController {
     return this.booksCollectionService.findAll();
   }
 
-  //get books whose favorite field is set to true
+  //get favorite books 
   @Get('favorite')
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
@@ -48,7 +50,7 @@ export class BooksCollectionController {
     return this.booksCollectionService.getRandomBooks()
   }
 
-  // change the book with the given id to favorite
+  // save the book with the given id to favorite or remove it from favorite
   @Put('favorite/:id')
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
@@ -72,11 +74,11 @@ export class BooksCollectionController {
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
   update(
-    @Param('id', ParseUUIDPipe) id: string, 
+    @Param('id', ParseUUIDPipe) bookId: string, 
     @Body() updateBooksCollectionDto: UpdateBooksCollectionDto,
     @CurrentUser() currentUserId: string
   ) {
-    return this.booksCollectionService.update(id, updateBooksCollectionDto, currentUserId);
+    return this.booksCollectionService.update(bookId, updateBooksCollectionDto, currentUserId);
   }
 
   //delete book by id
@@ -84,9 +86,9 @@ export class BooksCollectionController {
   @AllowedRoles(UserRole.ADMIN, UserRole.USER)
   @UseGuards(RolesGuard)
   remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseUUIDPipe) bookId: string,
     @CurrentUser() currentUserId: string
   ) {
-    return this.booksCollectionService.remove(id, currentUserId);
+    return this.booksCollectionService.remove(bookId, currentUserId);
   }
 }

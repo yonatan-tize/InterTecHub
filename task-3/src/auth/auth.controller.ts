@@ -2,13 +2,16 @@ import { Controller, Body, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUsersDto } from 'src/users/dtos/create-users.dto';
 import { SignInDto } from './dtos/sign-in.dto';
-
+import { ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
     constructor(
         private authService: AuthService,
     ){}
 
+    @ApiOperation({summary: 'allows new users to signup the first user is by default admin'})
     @Post('signup')
     async signUp(@Body() user: CreateUsersDto){
         return await this.authService.signUp(user);
