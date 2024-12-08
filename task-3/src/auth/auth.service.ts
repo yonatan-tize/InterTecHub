@@ -16,11 +16,11 @@ export class AuthService {
         if(foundUser){
             throw new HttpException('Email already in use.', 400);    
         };
-        
+        //hash password
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
 
-        // Create a new user
+        // register new user
         const newUser = await this.usersService.create(user);
         return newUser;
     }
@@ -43,13 +43,10 @@ export class AuthService {
             email: foundUser.email, 
             sub: foundUser.id,
             role: foundUser.role
-        }
-
+        };
         const jwt = await this.jwtService.signAsync(payLoad);
-        //return token
-        return {
-            accessToken: jwt
-        }
-    }
 
+        //return token
+        return { accessToken: jwt };
+    };
 }
