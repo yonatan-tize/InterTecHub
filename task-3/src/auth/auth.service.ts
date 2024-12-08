@@ -14,10 +14,9 @@ export class AuthService {
     async signUp(user: CreateUsersDto){  
         const foundUser = await this.usersService.findOneByEmail(user.email);
         if(foundUser){
-            throw new HttpException('User already exists', 400);    
+            throw new HttpException('Email already in use.', 400);    
         };
         
-        // Hash the password
         const hashedPassword = await bcrypt.hash(user.password, 10);
         user.password = hashedPassword;
 
@@ -30,13 +29,13 @@ export class AuthService {
         //check if user exist
         const foundUser = await this.usersService.findOneByEmail(user.email);
         if(!foundUser){
-            throw new HttpException('User not found', 404);
+            throw new HttpException('Wrong credentials', 401);
         };
 
         //check if password is correct
         const isPasswordCorrect = await bcrypt.compare(user.password, foundUser.password);
         if(!isPasswordCorrect){
-            throw new HttpException('Invalid credentials', 401);
+            throw new HttpException('Wrong credentials', 401);
         }
 
         //generate token
@@ -47,8 +46,10 @@ export class AuthService {
         }
 
         const jwt = await this.jwtService.signAsync(payLoad);
-
         //return token
+        return {
+            accessToken: jwt
+        }
     }
 
 }

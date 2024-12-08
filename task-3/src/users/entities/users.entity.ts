@@ -21,13 +21,4 @@ export class User{
       default: UserRole.USER
     })
     role: string 
-
-    @Column()
-    createdAt: Date
-
-    @Column()
-    updatedAt: Date
-
-    @Column()
-    deletedAt: Date
 }
