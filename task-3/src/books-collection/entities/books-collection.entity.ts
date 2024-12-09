@@ -29,8 +29,8 @@ export class BookCollections {
     @JoinColumn({name: 'userId'})
     user: User
 
-    @ManyToMany(()=> User, (user)=> user.favoriteBooks)
+    @ManyToMany(() => User, (user) => user.favoriteBooks)
     @JoinTable()
-    favoriteOf?: User[]
+    favoriteOf?: User[];
 
 }

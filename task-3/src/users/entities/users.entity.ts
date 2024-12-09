@@ -24,8 +24,8 @@ export class User{
   role: UserRole 
 
 
-  @ManyToMany(() => BookCollections, (book) => book.id, { cascade: true })
-  favoriteBooks?: BookCollections[];
+  @ManyToMany(() => BookCollections, (book) => book.favoriteOf)
+  favoriteBooks: BookCollections[];
 
   @OneToMany(() => BookCollections, (bookCollection) => bookCollection.user)
   books?: BookCollections[];

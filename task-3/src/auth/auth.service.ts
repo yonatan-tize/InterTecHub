@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dtos/sign-in.dto'; 
 import { UsersService } from 'src/users/users.service';
@@ -14,17 +14,6 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ){}
     async signUp(user: CreateUsersDto){  
-        // if database is empty make the first user admin
-        // const usersCount = await this.usersService.count();
-        // let newUser;
-        // if (usersCount === 0) {
-        //     newUser = {
-        //         ...user,
-        //         role: 'admin'
-        //     }
-        // } else{
-        //     newUser = {...user}
-        // }
         //if email exist typeorm will return bad request since email is set unique 
         //hash password
         const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -63,4 +52,20 @@ export class AuthService {
         //return token
         return { accessToken: jwt };
     };
+
+    async validateUserByToken(token: string){
+        try {
+            console.log(token)
+            const payload = await this.jwtService.verifyAsync(token);
+            const user = await this.usersService.findOneByEmail(payload.email);
+
+            if (!user) {
+                throw new UnauthorizedException('User not found');
+            }
+
+            return user; // Return the user if valid
+        } catch (err) {
+            throw new UnauthorizedException('Invalid token when parsing token');
+        }
+    }
 }

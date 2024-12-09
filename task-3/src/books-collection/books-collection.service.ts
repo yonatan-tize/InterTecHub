@@ -105,7 +105,7 @@ export class BooksCollectionService {
       throw new HttpException("No book found with the given id", 404);
     }
 
-    if ('book.userId' !== currentUserId) {
+    if (book.userId !== currentUserId) {
       throw new HttpException("You are not authorized to update this book", 403);
     }
 
@@ -126,7 +126,7 @@ export class BooksCollectionService {
       throw new HttpException("No book found with the given id", 404);
     }
 
-    if ("book.userId" !== currentUserId) {
+    if (book.userId !== currentUserId) {
       throw new HttpException("You are not authorized to delete this book", 403);
     }
 
