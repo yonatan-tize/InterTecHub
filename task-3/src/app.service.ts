@@ -12,6 +12,9 @@ export class AppService {
       They are also allowed to promote users to admin. The first user is by default admin. For other users the default role is User.
 
       Explore all endpoints to manage your book collection effectively!
+
+      Here is the swagger documentation,
+      https://intertechub-1-on0l.onrender.com 
     `;
   }
 }
