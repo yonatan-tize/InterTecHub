@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate{
         }
 
         try{
+            console.log(token)
             const payLoad = this.jwtService.verify(token);
             request.currentUserId = payLoad.sub;
             request.currentUserRole = payLoad.role

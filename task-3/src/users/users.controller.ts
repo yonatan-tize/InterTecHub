@@ -23,19 +23,4 @@ export class UsersController {
         return this.usersService.promoteUser(userId)
     }
 
-    @Post("/:id")
-    updateProfile(
-        @Body() body: UpdateUsersDto, 
-        @Param('id') id: string,
-        @CurrentUser() userId: string,
-        @Res() res: any
-    ){
-        if (id !== userId){
-          res.status(403).json({
-              message: 'You can only update your own profile'
-          });
-          return;
-        }
-        return this.usersService.updateProfile(id, body);
-    }
 };

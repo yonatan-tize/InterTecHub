@@ -9,7 +9,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-ApiBearerAuth()
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('books')
 export class BooksCollectionController {

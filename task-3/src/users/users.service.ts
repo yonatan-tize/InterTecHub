@@ -26,14 +26,6 @@ export class UsersService {
         return await this.userRepository.findOne({where: {id}});
     }
 
-    async updateProfile(id: string, updateUserDto: UpdateUsersDto){
-        const user = await this.findOneById(id)
-        if (!user){
-            throw new BadRequestException('User not foind')
-        }
-        return await this.userRepository.update(id, updateUserDto)
-    }
-
     async findUserFavorite(currentUserId: string){
         const user = await this.userRepository.findOne({
             where:{ id: currentUserId },
