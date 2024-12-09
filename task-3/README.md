@@ -40,7 +40,17 @@ $ npm run start:dev
 
 ```
 
-## Endpoints
+## Explanation
+
+The first user is assigned the role of admin, while all subsequent users are assigned the default role of user until an admin promotes them.
+
+For now, the admin credentials are:
+```json
+{
+  "email": "interTecHub@gmail.com",
+  "password": "12345678"
+}
 ```
-To access all the end points you can refer the following swagger documentation.
+
+To access all the endpoints, you can refer to the following Swagger documentation.
 
