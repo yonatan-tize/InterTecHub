@@ -13,8 +13,7 @@ export class AppService {
 
       Explore all endpoints to manage your book collection effectively!
 
-      Here is the swagger documentation,
-      https://intertechub-1-on0l.onrender.com/api
+      for more information refer the swagger documentation on github.
     `;
   }
 }
