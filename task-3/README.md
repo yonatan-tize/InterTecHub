@@ -48,7 +48,7 @@
   ```
 
   To access all the endpoints, you can refer to the following Swagger documentation:
-  [Swagger Documentation](https://intertechub-1-on0l.onrender.com/api)
+  [Swagger Documentation](https://intertechub-3.onrender.com/api)
 
   The live link is:
-  [Live Link](https://intertechub-1-on0l.onrender.com)
+  [Live Link](https://intertechub-3.onrender.com)
