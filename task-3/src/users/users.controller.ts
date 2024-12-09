@@ -4,7 +4,7 @@ import { UpdateUsersDto } from './dtos/update-users.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import { UserRole } from 'src/enums/role.enum';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { AllowedRoles } from 'src/decorator/role.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 
@@ -19,6 +19,7 @@ export class UsersController {
     @Put('promote/:id')
     @AllowedRoles(UserRole.ADMIN)
     @UseGuards(RolesGuard)
+    @ApiOperation({ summary: 'promotes a given user to admin' })
     promoteUser(@Param('id') userId: string){
         return this.usersService.promoteUser(userId)
     }

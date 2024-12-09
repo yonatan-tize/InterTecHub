@@ -11,12 +11,13 @@ export class AuthController {
         private authService: AuthService,
     ){}
 
-    @ApiOperation({summary: 'allows new users to signup the first user is by default admin'})
+    @ApiOperation({summary: 'allows new users to signup. he first user is by default admin'})
     @Post('signup')
     async signUp(@Body() user: CreateUsersDto){
         return await this.authService.signUp(user);
     }
 
+    @ApiOperation({summary: 'allows users to signIn with the correct credentials'})
     @Post('signin')
     async signIn(@Body() user: SignInDto){
         return await this.authService.signIn(user);

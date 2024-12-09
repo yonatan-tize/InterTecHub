@@ -7,7 +7,7 @@ import { AllowedRoles } from 'src/decorator/role.decorator';
 import { UserRole } from 'src/enums/role.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
@@ -19,6 +19,7 @@ export class BooksCollectionController {
   @Post()
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'users with role of user are allowed to create books' })
   create(
     @Body() createBooksCollectionDto: CreateBooksCollectionDto,
     @CurrentUser() currentUserId: string
@@ -30,6 +31,7 @@ export class BooksCollectionController {
   @Get()
   @AllowedRoles(UserRole.USER, UserRole.ADMIN)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Retrieve all books created by all users' })
   findAll() {
     return this.booksCollectionService.findAll();
   }
@@ -38,6 +40,7 @@ export class BooksCollectionController {
   @Get('favorite')
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Retrieve all favorite books of currently logged in user. only user is allowed' })
   findFavorites(@CurrentUser() currentUserId: string){
     return this.booksCollectionService.findFavorites(currentUserId)
   }
@@ -46,6 +49,7 @@ export class BooksCollectionController {
   @Get('random')
   @AllowedRoles(UserRole.USER, UserRole.ADMIN)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Retrieve random 1-10 books created by users' })
   getRandomBooks(){
     return this.booksCollectionService.getRandomBooks()
   }
@@ -54,6 +58,7 @@ export class BooksCollectionController {
   @Put('favorite/:id')
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'to make a book favorite or remove from favorite' })
   changeFavorite(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() currentUserId: string
@@ -65,6 +70,7 @@ export class BooksCollectionController {
   @Get(':id')
   @AllowedRoles(UserRole.ADMIN, UserRole.USER)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'Retrieve a single book with the given id' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.booksCollectionService.findOne(id);
   }
@@ -73,6 +79,7 @@ export class BooksCollectionController {
   @Put(':id')
   @AllowedRoles(UserRole.USER)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'allows users to edit books created by them only' })
   update(
     @Param('id', ParseUUIDPipe) bookId: string, 
     @Body() updateBooksCollectionDto: UpdateBooksCollectionDto,
@@ -85,6 +92,7 @@ export class BooksCollectionController {
   @Delete(':id')
   @AllowedRoles(UserRole.ADMIN, UserRole.USER)
   @UseGuards(RolesGuard)
+  @ApiOperation({ summary: 'delete a book with the given id' })
   remove(
     @Param('id', ParseUUIDPipe) bookId: string,
     @CurrentUser() currentUserId: string
