@@ -4,19 +4,14 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   getHello(): string {
     return `
-      Hello InterTecHub! Welcome to my Books Collection project.
-      The following are the available endpoints:
+      Hello InterTecHub! Welcome to my Books Collection with user project.
+      The project will alow a user to interact with different books that are created by the user him self and other fellow users.
+      Logged in users can create books, access all books, make a book their favorite and update the books they created.
+      
+      Admins are allowed to retrieve all books as well as delete books(if they are inappropriate) created by other users. 
+      They are also allowed to promote users to admin. The first user is by default admin. For other users the default role is User.
 
-      - POST /books: Create a new book and return the newly created book.
-      - GET /books: Retrieve all books in the collection.
-      - GET /books/:id: Retrieve details of a specific book by its ID.
-      - PUT /books/:id: Update the details of a book with the given ID.
-      - DELETE /books/:id: Delete a book with the given ID from the collection.
-      - GET /books/favorite: Retrieve all books where the favorite field is set to true.
-      - GET /books/random: Retrieve random books from the collection.
-      - PUT /books/favorite/:id: Mark the book with the given ID as favorite or remove it from favorites.
-
-      Explore these endpoints to manage your book collection effectively!
+      Explore all endpoints to manage your book collection effectively!
     `;
   }
 }
